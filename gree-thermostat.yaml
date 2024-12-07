@@ -1,0 +1,49 @@
+sensor:
+  - platform: homeassistant
+    id: outdoor_temperature
+    entity_id: sensor.gree_status_t_outdoor
+  - platform: homeassistant
+    id: indoor_temperature
+    entity_id: sensor.gree_status_t_remote_room
+
+switch:
+  - platform: template
+    name: "wp on/off switch"
+    id: wp_on_off_switch
+    turn_on_action:
+      lambda: |-
+        auto val = id(gree_status_t_outdoor).state;
+        auto updateCall = id(gree_wot_heat).make_call();
+        if (val > 8.0) { updateCall.set_value(28); }
+        if ((val > 4.0) && (val <= 8.0)) { updateCall.set_value(32); }
+        if ((val > 0.0) && (val <= 4.0)) { updateCall.set_value(33); }
+        if ((val < 0.0) && (val > -4.0)) { updateCall.set_value(35); }
+        if (val < -4.0) {updateCall.set_value(37); }
+        updateCall.perform();
+        auto call = id(gree_on_off).make_call();
+        call.set_option("On");
+        call.perform();
+        if (val > 2.0) {
+           id(gree_coil_quiet_ctrl).turn_on();
+        }
+    turn_off_action:
+      lambda: |-
+        auto call = id(gree_on_off).make_call();
+        call.set_option("Off");
+        call.perform();
+
+climate:
+  - platform: thermostat
+    name: "thermostat gree"
+    sensor: indoor_temperature
+    heat_deadband: 0.1
+    heat_overrun: 0.1
+    set_point_minimum_differential: 0.1 °C
+    min_heating_off_time: 300s
+    min_heating_run_time: 300s
+    min_idle_time: 300s
+    id: climate_thermostat
+    heat_action:
+      - switch.turn_on: wp_on_off_switch
+    idle_action:
+      - switch.turn_off: wp_on_off_switch
