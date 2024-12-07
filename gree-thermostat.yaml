@@ -13,7 +13,7 @@ switch:
         if ((outdoorTemp < 0.0) && (outdoorTemp > -4.0)) { wotTemp = 35; }
         if (outdoorTemp < -4.0) { wotTemp = 37; }
         auto updateWotCall = id(gree_wot_heat).make_call();
-        updateWotCall.set_val(wotTemp);
+        updateWotCall.set_value(wotTemp);
         updateCall.perform();  // set WOT-heat temp
         auto call = id(gree_on_off).make_call(); // turn on HP unit
         call.set_option("On");
