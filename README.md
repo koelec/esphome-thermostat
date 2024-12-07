@@ -18,7 +18,7 @@ Next this it will turn on 'silent mode' when outdoor temparature is above 2 degr
 You can change the logic for both turning on the 'silent mode' and setting the WOT-heat setting by changing the values in the yaml file to suit your own situation.
 
 ## Installation
-- Copy the yaml file contents into the end of the ESPHome device's yaml file and edit according to your situation. 
+- Copy the [yaml file contents](/gree-thermostat.yaml)  into the end of the ESPHome device's yaml file and edit according to your situation. 
 - validate yaml and flash ESP device in HA's ESPHome UI.
 - Add climate thermostat to HA dashboard
   
