@@ -4,7 +4,7 @@ switch:
     id: wp_on_off_switch
     turn_on_action:
       lambda: |-
-        id(gree_cntrl_state).turn_off(); // set ctrl state = water-out
+        id(gree_coil_ctrl_state).turn_off(); // set ctrl state = water-out
         auto outdoorTemp = id(gree_status_t_outdoor).state; // read outdoor temp
         auto wotTemp = 28;
         if (outdoorTemp > 8.0) { wotTemp = 28; }
